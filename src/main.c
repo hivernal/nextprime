@@ -1,53 +1,77 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <gmp.h>
 #include <time.h>
-
 #include "gen_nextprime.h"
 
-void print_help() {
-  printf("Usage: nextprime PRIME_NUMBER [SIZE]\n");
-  printf("Generate prime number bigger than PRIME_NUMBER\n");
-}
+#define HELP                                                                   \
+  "Usage: nextprime [OPTION] PRIME_NUMBER.\n"                                  \
+  "Generates a prime number greater than PRIME_NUMBER using Diemitko's "       \
+  "theorem.\n\n"                                                               \
+  "  -f FILE\t\toutput file\n"                                                 \
+  "  -s SIZE\t\tsize of number\n"
 
 int main(int argc, char** argv) {
-  if (argc < 2 || argc > 3 || strcmp(argv[1], "--help") == 0 ||
-      strcmp(argv[1], "-h") == 0) {
-    print_help();
-    return EXIT_SUCCESS;
+  const char* option_size = NULL;
+  const char* option_file = NULL;
+    while (--argc > 0 && (*++argv)[0] == '-') {
+    char option = *++argv[0];
+    switch(option) {
+      case 'f':
+        if (--argc > 0 && (*++argv)[0] != '-') {
+          option_file = *argv;
+          break;
+        }
+        printf(HELP);
+        return EXIT_FAILURE;
+      case 's':
+        if (--argc > 0 && (*++argv)[0] != '-') {
+          option_size = *argv;
+          break;
+        }
+      default:
+        printf(HELP);
+        return EXIT_FAILURE;
+    }
   }
-  long size = 1;
-  if (argc == 3)
-    size = strtol(argv[2], NULL, 10);
-  if (size < 1) {
-    print_help();
-    return EXIT_SUCCESS;
+  if (argc != 1) {
+    printf(HELP);
+    return EXIT_FAILURE;
   }
 
-  big_nums* diemitko_nums = malloc(sizeof(big_nums));
-  mpz_init_set_ui(diemitko_nums->a, 1999);
-  mpz_init_set_str(diemitko_nums->n, argv[1], 10);
-  mpz_sub_ui(diemitko_nums->deg, diemitko_nums->deg, 1);
-  mpz_inits(diemitko_nums->r, diemitko_nums->deg, diemitko_nums->result, NULL);
-  fprintf(stdout,"n =\n%s\n\n", argv[1]);
-  clock_t begin = clock();
+  long size = 1;
+  if (option_size != NULL && (size = strtol(option_size, NULL, 10)) <= 0) {
+    printf(HELP);
+    return EXIT_FAILURE;
+  }
+  FILE* ouput_stream = stdout;
+  if (option_file != NULL && (ouput_stream = fopen(option_file, "w")) == NULL) {
+    printf("Error to open file\n");
+    return EXIT_FAILURE;
+  }
+  big_nums diemitko_nums;
+  mpz_init_set_str(diemitko_nums.n, *argv, 10);
+  if(mpz_cmp_ui(diemitko_nums.n, 0) == 0) {
+    printf(HELP);
+    if (option_file != NULL)
+      fclose(ouput_stream);
+    return EXIT_FAILURE;
+  }
+  mpz_init_set_ui(diemitko_nums.a, 1999);
+  mpz_init(diemitko_nums.r);
+  fprintf(ouput_stream,"n =\n%s\n\n", *argv);
+
   do {
-    gen_nextprime(diemitko_nums);
-    clock_t end = clock();
-    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-    fprintf(stdout, "R =\n");
-    mpz_out_str(stdout, 10, diemitko_nums->r);
-    fprintf(stdout, "\nN =\n");
-    mpz_out_str(stdout, 10, diemitko_nums->n);
-    fprintf(stdout, "\n");
-    if (time_spent < 60.0f)
-      fprintf(stdout, "Time = %.4lf seconds\n\n", time_spent);
-    else if(time_spent < 3600.0f)
-      fprintf(stdout, "Time = %.2lf minutes\n\n", time_spent/60);
-  } while (mpz_sizeinbase(diemitko_nums->n, 10) < size);
-  mpz_clears(diemitko_nums->n, diemitko_nums->r, diemitko_nums->result,
-             diemitko_nums->deg, diemitko_nums->a, NULL);
-  free(diemitko_nums);
+    gen_nextprime(&diemitko_nums);
+    fprintf(ouput_stream, "R =\n");
+    mpz_out_str(ouput_stream, 10, diemitko_nums.r);
+    fprintf(ouput_stream, "\nN =\n");
+    mpz_out_str(ouput_stream, 10, diemitko_nums.n);
+    fprintf(ouput_stream, "\n\n");
+  } while (mpz_sizeinbase(diemitko_nums.n, 10) < size);
+
+  mpz_clears(diemitko_nums.n, diemitko_nums.r, diemitko_nums.a, NULL);
+  if (option_file != NULL)
+    fclose(ouput_stream);
   return EXIT_SUCCESS;
 }
