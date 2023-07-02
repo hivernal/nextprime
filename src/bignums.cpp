@@ -1,29 +1,18 @@
 #include "bignums.h"
 
-BigNums::BigNums() : n(3), r(0), a(2) {}
+nextprime::bignums::bignums() : n(3), r(0), a(2) {}
 
-BigNums::BigNums(mpz_class n, mpz_class r, mpz_class a) : n(n), r(r), a(a) {}
+nextprime::bignums::bignums(mpz_class n, mpz_class r, mpz_class a)
+    : n(n), r(r), a(a) {}
 
-mpz_class BigNums::getN() {
-  return n;
-}
+mpz_class nextprime::bignums::get_n() { return n; }
 
-void BigNums::setN(mpz_class n) {
-  this->n = n;
-}
+void nextprime::bignums::set_n(mpz_class number) { n = number; }
 
-mpz_class BigNums::getR() {
-  return r;
-}
+mpz_class nextprime::bignums::get_r() { return r; }
 
-void BigNums::setR(mpz_class r) {
-  this->r = r;
-}
+void nextprime::bignums::set_r(mpz_class number) { r = number; }
 
-mpz_class BigNums::getA() {
-  return a;
-}
+mpz_class nextprime::bignums::get_a() { return a; }
 
-void BigNums::setA(mpz_class a) {
-  this->a = a;
-}
+void nextprime::bignums::set_a(mpz_class number) { a = number; }

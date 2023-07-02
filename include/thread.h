@@ -1,23 +1,25 @@
 #ifndef THREAD_H
 #define THREAD_H
 
+#define THREADS_NUMBER 3
+
 #include "bignums.h"
 #include <thread>
 
-#define THREADS_NUMBER 3
-
-class Thread : public BigNums {
-  std::thread* thread;
+namespace nextprime {
+class thread : public bignums {
+  std::thread* thr;
   bool status;
 public:
-  Thread();
-  Thread(mpz_class n, mpz_class r, mpz_class a);
-  ~Thread();
-  static void threadFunc(mpz_class& n, mpz_class& r,
-                         const mpz_class& a, bool& status);
+  thread();
+  thread(mpz_class n, mpz_class r, mpz_class a);
+  ~thread();
+  static void thread_func(mpz_class& n, mpz_class& r, const mpz_class& a,
+                          bool& status);
   void start();
   void stop();
-  bool getStatus();
+  bool get_status();
 };
+}
 
 #endif

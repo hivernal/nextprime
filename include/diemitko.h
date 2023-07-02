@@ -3,12 +3,13 @@
 
 #include "bignums.h"
 
-class Diemitko : public BigNums {
+namespace nextprime {
+class diemitko : public bignums {
 public:
-  Diemitko();
-  Diemitko(mpz_class n, mpz_class r, mpz_class a);
-  bool isPrime();
-  void getNextPrime();
+  diemitko();
+  diemitko(mpz_class n, mpz_class r, mpz_class a);
+  void get_next_prime();
+  bool is_prime();
 };
-
+}
 #endif

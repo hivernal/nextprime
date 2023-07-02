@@ -1,17 +1,14 @@
 #include "thread.h"
 
-Thread::Thread() : thread(nullptr), status(false) {}
+nextprime::thread::thread() : thr(nullptr), status(false) {}
 
-Thread::Thread(mpz_class n, mpz_class r, mpz_class a) : BigNums(n, r, a),
-                                                        thread(nullptr),
-                                                        status(false) {}
+nextprime::thread::~thread() { stop(); }
 
-Thread::~Thread() {
-  stop();
-}
+nextprime::thread::thread(mpz_class n, mpz_class r, mpz_class a)
+    : bignums(n, r, a), thr(nullptr), status(false) {}
 
-void Thread::threadFunc(mpz_class &n, mpz_class &r,
-                        const mpz_class &a, bool &status) {
+void nextprime::thread::thread_func(mpz_class& n, mpz_class& r,
+                                    const mpz_class& a, bool& status) {
   mpz_class tmp = n;
   n = n * r + 1;
   mpz_class result, degree = n - 1;
@@ -32,19 +29,17 @@ void Thread::threadFunc(mpz_class &n, mpz_class &r,
   status = true;
 }
 
-void Thread::start() {
-  thread = new std::thread(threadFunc, std::ref(n), std::ref(r),
+void nextprime::thread::start() {
+  thr = new std::thread(thread_func, std::ref(n), std::ref(r),
                            std::cref(a), std::ref(status));
 }
 
-void Thread::stop() {
-  if (thread != nullptr) {
-    thread->join();
-    delete thread;
-    thread = nullptr;
+void nextprime::thread::stop() {
+  if (thr != nullptr) {
+    thr->join();
+    delete thr;
+    thr = nullptr;
   }
 }
 
-bool Thread::getStatus() {
-  return status;
-}
+bool nextprime::thread::get_status() { return status; }
