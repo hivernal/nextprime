@@ -12,24 +12,24 @@
 int main(int argc, char** argv) {
   const char* option_size = NULL;
   const char* option_file = NULL;
-    while (--argc > 0 && (*++argv)[0] == '-') {
+  while (--argc > 0 && (*++argv)[0] == '-') {
     char option = *++argv[0];
     switch(option) {
-      case 'f':
-        if (--argc > 0 && (*++argv)[0] != '-') {
-          option_file = *argv;
-          break;
-        }
-        printf(HELP);
-        return EXIT_FAILURE;
-      case 's':
-        if (--argc > 0 && (*++argv)[0] != '-') {
-          option_size = *argv;
-          break;
-        }
-      default:
-        printf(HELP);
-        return EXIT_FAILURE;
+    case 'f':
+      if (--argc > 0 && (*++argv)[0] != '-') {
+        option_file = *argv;
+        break;
+      }
+      printf(HELP);
+      return EXIT_FAILURE;
+    case 's':
+      if (--argc > 0 && (*++argv)[0] != '-') {
+        option_size = *argv;
+        break;
+      }
+    default:
+      printf(HELP);
+      return EXIT_FAILURE;
     }
   }
   if (argc != 1) {
