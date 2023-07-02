@@ -1,12 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <gmp.h>
 #include <pthread.h>
-
-#include "gen_nextprime.h"
+#include "diemitko.h"
 
 void* thread_func(void* thread_data) {
-  big_nums* diemitko_nums = (big_nums*)thread_data;
+  bignums_t* diemitko_nums = (bignums_t*)thread_data;
   mpz_t tmp;
   mpz_init_set(tmp, diemitko_nums->n);
   mpz_mul(diemitko_nums->n, diemitko_nums->n, diemitko_nums->r);
@@ -21,13 +19,13 @@ void* thread_func(void* thread_data) {
   pthread_exit((void*)NOT_PRIME);
 }
 
-void gen_nextprime(big_nums* diemitko_nums) {
+void gen_nextprime(bignums_t* diemitko_nums) {
   mpz_t tmp;
   mpz_init_set(tmp, diemitko_nums->n);
   mpz_mul_ui(diemitko_nums->r, diemitko_nums->n, 4);
   mpz_add_ui(diemitko_nums->r, diemitko_nums->r, 2);
 
-  big_nums thread_data;
+  bignums_t thread_data;
   mpz_init_set(thread_data.n, tmp);
   mpz_init(thread_data.r);
   mpz_init_set(thread_data.a, diemitko_nums->a);
@@ -55,7 +53,7 @@ void gen_nextprime(big_nums* diemitko_nums) {
   mpz_clears(thread_data.n, thread_data.r, thread_data.a, NULL);
 }
 
-int is_prime(big_nums* diemitko_nums) {
+int is_prime(bignums_t* diemitko_nums) {
   mpz_t result, degree;
   mpz_inits(result, degree, NULL);
   mpz_sub_ui(degree, diemitko_nums->n, 1);

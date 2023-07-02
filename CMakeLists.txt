@@ -3,7 +3,7 @@ project(nextprime C)
 
 set(SRC
     src/main.c
-    src/gen_nextprime.c
+    src/diemitko.c
     )
 
 set(INCLUDE

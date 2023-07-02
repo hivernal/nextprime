@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <gmp.h>
-#include <time.h>
-#include "gen_nextprime.h"
+#include "diemitko.h"
 
 #define HELP                                                                   \
   "Usage: nextprime [OPTION] PRIME_NUMBER.\n"                                  \
@@ -49,7 +47,7 @@ int main(int argc, char** argv) {
     printf("Error to open file\n");
     return EXIT_FAILURE;
   }
-  big_nums diemitko_nums;
+  bignums_t diemitko_nums;
   mpz_init_set_str(diemitko_nums.n, *argv, 10);
   if(mpz_cmp_ui(diemitko_nums.n, 0) == 0) {
     printf(HELP);
