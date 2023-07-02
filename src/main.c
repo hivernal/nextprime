@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <gmp.h>
-#include <time.h>
-#include "gen_nextprime.h"
+#include "diemitko.h"
 
 #define HELP                                                                   \
   "Usage: nextprime [OPTION] PRIME_NUMBER.\n"                                  \
@@ -14,24 +12,24 @@
 int main(int argc, char** argv) {
   const char* option_size = NULL;
   const char* option_file = NULL;
-    while (--argc > 0 && (*++argv)[0] == '-') {
+  while (--argc > 0 && (*++argv)[0] == '-') {
     char option = *++argv[0];
     switch(option) {
-      case 'f':
-        if (--argc > 0 && (*++argv)[0] != '-') {
-          option_file = *argv;
-          break;
-        }
-        printf(HELP);
-        return EXIT_FAILURE;
-      case 's':
-        if (--argc > 0 && (*++argv)[0] != '-') {
-          option_size = *argv;
-          break;
-        }
-      default:
-        printf(HELP);
-        return EXIT_FAILURE;
+    case 'f':
+      if (--argc > 0 && (*++argv)[0] != '-') {
+        option_file = *argv;
+        break;
+      }
+      printf(HELP);
+      return EXIT_FAILURE;
+    case 's':
+      if (--argc > 0 && (*++argv)[0] != '-') {
+        option_size = *argv;
+        break;
+      }
+    default:
+      printf(HELP);
+      return EXIT_FAILURE;
     }
   }
   if (argc != 1) {
@@ -49,29 +47,29 @@ int main(int argc, char** argv) {
     printf("Error to open file\n");
     return EXIT_FAILURE;
   }
-  big_nums diemitko_nums;
-  mpz_init_set_str(diemitko_nums.n, *argv, 10);
-  if(mpz_cmp_ui(diemitko_nums.n, 0) == 0) {
+  bignums_t diemitko;
+  mpz_init_set_str(diemitko.n, *argv, 10);
+  if(mpz_cmp_ui(diemitko.n, 0) == 0) {
     printf(HELP);
-    if (option_file != NULL)
+    if (ouput_stream != stdout)
       fclose(ouput_stream);
     return EXIT_FAILURE;
   }
-  mpz_init_set_ui(diemitko_nums.a, 1999);
-  mpz_init(diemitko_nums.r);
-  fprintf(ouput_stream,"n =\n%s\n\n", *argv);
+  mpz_init_set_ui(diemitko.a, 1999);
+  mpz_init(diemitko.r);
+  fprintf(ouput_stream,"N =\n%s\n\n", *argv);
 
   do {
-    gen_nextprime(&diemitko_nums);
+    gen_nextprime(&diemitko);
     fprintf(ouput_stream, "R =\n");
-    mpz_out_str(ouput_stream, 10, diemitko_nums.r);
+    mpz_out_str(ouput_stream, 10, diemitko.r);
     fprintf(ouput_stream, "\nN =\n");
-    mpz_out_str(ouput_stream, 10, diemitko_nums.n);
+    mpz_out_str(ouput_stream, 10, diemitko.n);
     fprintf(ouput_stream, "\n\n");
-  } while (mpz_sizeinbase(diemitko_nums.n, 10) < size);
+  } while (mpz_sizeinbase(diemitko.n, 10) < size);
 
-  mpz_clears(diemitko_nums.n, diemitko_nums.r, diemitko_nums.a, NULL);
-  if (option_file != NULL)
+  mpz_clears(diemitko.n, diemitko.r, diemitko.a, NULL);
+  if (ouput_stream != stdout)
     fclose(ouput_stream);
   return EXIT_SUCCESS;
 }
