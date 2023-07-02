@@ -1,20 +1,14 @@
 #ifndef DIEMITKO_H
 #define DIEMITKO_H
 
-#include <gmp.h>
+#include "bignums.h"
 
-enum {
-  NOT_PRIME,
-  PRIME
+class Diemitko : public BigNums {
+public:
+  Diemitko();
+  Diemitko(mpz_class n, mpz_class r, mpz_class a);
+  bool isPrime();
+  void getNextPrime();
 };
-
-typedef struct {
-  mpz_t n;
-  mpz_t r;
-  mpz_t a;
-} bignums_t;
-
-int is_prime(bignums_t* diemitko_nums);
-void gen_nextprime(bignums_t* diemitko_nums);
 
 #endif

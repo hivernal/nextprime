@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.2)
-project(nextprime C)
+project(nextprime CXX)
 
 set(SRC
-    src/main.c
-    src/diemitko.c
+    src/main.cpp
+    src/bignums.cpp
+    src/diemitko.cpp
+    src/thread.cpp
     )
 
 set(INCLUDE
@@ -12,5 +14,5 @@ set(INCLUDE
     )
 
 add_executable(nextprime ${SRC})
-target_link_libraries(nextprime PRIVATE gmp)
+target_link_libraries(nextprime PRIVATE gmp gmpxx)
 target_include_directories(nextprime PRIVATE ${INCLUDE})
