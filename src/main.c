@@ -57,8 +57,8 @@ int main(int argc, char** argv) {
   }
   mpz_init_set_ui(diemitko.a, 1999);
   mpz_init(diemitko.r);
-  fprintf(ouput_stream,"N =\n%s\n\n", *argv);
 
+  fprintf(ouput_stream,"N =\n%s\n\n", *argv);
   do {
     gen_nextprime(&diemitko);
     fprintf(ouput_stream, "R =\n");
