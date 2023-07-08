@@ -15,14 +15,14 @@ void nextprime::thread::thread_func(mpz_class& n, mpz_class& r,
   mpz_powm(result.get_mpz_t(), a.get_mpz_t(), degree.get_mpz_t(), n.get_mpz_t());
   if (result != 1) {
     status = false;
-    r -= 2 * (threadsNumber + 1);
+    r -= 2 * (threads_number + 1);
     n = tmp;
     return;
   }
   mpz_powm(result.get_mpz_t(), a.get_mpz_t(), r.get_mpz_t(), n.get_mpz_t());
   if (result == 1) {
     status = false;
-    r -= 2 * (threadsNumber + 1);
+    r -= 2 * (threads_number + 1);
     n = tmp;
     return;
   }

@@ -7,7 +7,7 @@
 
 namespace nextprime {
 enum { 
-  threadsNumber = 3
+  threads_number = 3
 };
 
 class thread : public bignums {
