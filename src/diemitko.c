@@ -33,7 +33,7 @@ void gen_nextprime(bignums_t* diemitko_nums) {
   while(1) {
     pthread_t thread;
     pthread_create(&thread, NULL, thread_func, &thread_data);
-    mpz_mul(diemitko_nums->n, diemitko_nums->n, diemitko_nums->r);
+    mpz_mul(diemitko_nums->n, tmp, diemitko_nums->r);
     mpz_add_ui(diemitko_nums->n, diemitko_nums->n, 1);
     if (is_prime(diemitko_nums)) {
       pthread_join(thread, NULL);
@@ -47,7 +47,6 @@ void gen_nextprime(bignums_t* diemitko_nums) {
       break;
     }
     mpz_sub_ui(diemitko_nums->r, diemitko_nums->r, 4);
-    mpz_set(diemitko_nums->n, tmp);
   }
   mpz_clear(tmp);
   mpz_clears(thread_data.n, thread_data.r, thread_data.a, NULL);
