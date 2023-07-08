@@ -1,12 +1,15 @@
 #ifndef THREAD_H
 #define THREAD_H
 
-#define THREADS_NUMBER 3
 
 #include "bignums.h"
 #include <thread>
 
 namespace nextprime {
+enum { 
+  threadsNumber = 3
+};
+
 class thread : public bignums {
   std::thread* thr;
   bool status;

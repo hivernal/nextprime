@@ -9,22 +9,22 @@ nextprime::diemitko::diemitko(mpz_class n, mpz_class r, mpz_class a)
 void nextprime::diemitko::get_next_prime() {
   mpz_class tmp = n;
   r = 4 * n + 2;
-  nextprime::thread* threads = new nextprime::thread[THREADS_NUMBER];
-  for (int i = 0; i < THREADS_NUMBER; ++i) {
+  nextprime::thread* threads = new nextprime::thread[threadsNumber];
+  for (int i = 0; i < threadsNumber; ++i) {
     threads[i].set_n(n);
     threads[i].set_a(a);
     threads[i].set_r(r - 2 * (i + 1));
   }
 
   while (true) {
-    for (int i = 0; i < THREADS_NUMBER; ++i)
+    for (int i = 0; i < threadsNumber; ++i)
       threads[i].start();
     n = n * r + 1;
     if (is_prime()) {
       delete[] threads;
       return;
     }
-    for (int i = 0; i < THREADS_NUMBER; ++i) {
+    for (int i = 0; i < threadsNumber; ++i) {
       threads[i].stop();
       if (!threads[i].get_status())
         continue;
@@ -33,7 +33,7 @@ void nextprime::diemitko::get_next_prime() {
       delete[] threads;
       return;
     }
-    r -= 2 * (THREADS_NUMBER + 1);
+    r -= 2 * (threadsNumber + 1);
     n = tmp;
   }
 }
