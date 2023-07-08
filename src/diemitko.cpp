@@ -11,22 +11,22 @@ nextprime::diemitko::diemitko(boost::multiprecision::mpz_int n,
 void nextprime::diemitko::get_next_prime() {
   boost::multiprecision::mpz_int tmp = n;
   r = 4 * n + 2;
-  nextprime::thread* threads = new nextprime::thread[THREADS_NUMBER];
-  for (int i = 0; i < THREADS_NUMBER; ++i) {
+  nextprime::thread* threads = new nextprime::thread[threads_number];
+  for (int i = 0; i < threads_number; ++i) {
     threads[i].set_n(n);
     threads[i].set_a(a);
     threads[i].set_r(r - 2 * (i + 1));
   }
 
   while (true) {
-    for (int i = 0; i < THREADS_NUMBER; ++i)
+    for (int i = 0; i < threads_number; ++i)
       threads[i].start();
     n = n * r + 1;
     if (is_prime()) {
       delete[] threads;
       return;
     }
-    for (int i = 0; i < THREADS_NUMBER; ++i) {
+    for (int i = 0; i < threads_number; ++i) {
       threads[i].stop();
       if (!threads[i].get_status())
         continue;
@@ -35,7 +35,7 @@ void nextprime::diemitko::get_next_prime() {
       delete[] threads;
       return;
     }
-    r -= 2 * (THREADS_NUMBER + 1);
+    r -= 2 * (threads_number + 1);
     n = tmp;
   }
 }

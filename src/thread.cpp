@@ -21,7 +21,7 @@ void nextprime::thread::thread_func(boost::multiprecision::mpz_int& n,
     return;
   }
   status = false;
-  r -= 2 * (THREADS_NUMBER + 1);
+  r -= 2 * (threads_number + 1);
   n = tmp;
 }
 

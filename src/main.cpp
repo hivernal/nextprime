@@ -2,12 +2,12 @@
 #include <fstream>
 #include "diemitko.hpp"
 
-#define HELP                                                                   \
-  "Usage: nextprime [OPTION] PRIME_NUMBER.\n"                                  \
-  "Generates a prime number greater than PRIME_NUMBER using Diemitko's "       \
-  "theorem.\n\n"                                                               \
-  "  -f FILE\t\toutput file\n"                                                 \
-  "  -s SIZE\t\tsize of number\n"
+const char* help_msg =
+  "Usage: nextprime [OPTION] PRIME_NUMBER.\n"
+  "Generates a prime number greater than PRIME_NUMBER using Diemitko's "
+  "theorem.\n\n"
+  "  -f FILE\t\toutput file\n"
+  "  -s SIZE\t\tsize of number\n";
 
 int main(int argc, char** argv) {
   const char* option_size = nullptr;
@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
         option_file = *argv;
         break;
       }
-      std::cout << HELP;
+      std::cout << help_msg;
       return EXIT_FAILURE;
     case 's':
       if (--argc > 0 && (*++argv)[0] != '-') {
@@ -28,26 +28,26 @@ int main(int argc, char** argv) {
         break;
       }
     default:
-      std::cout << HELP;
+      std::cout << help_msg;
       return EXIT_FAILURE;
     }
   }
   if (argc != 1) {
-    std::cout << HELP;
+    std::cout << help_msg;
     return EXIT_FAILURE;
   }
 
   long size = 1;
   if (option_size != nullptr &&
       (size = std::strtol(option_size, nullptr, 10)) <= 0) {
-    std::cout << HELP;
+    std::cout << help_msg;
     return EXIT_FAILURE;
   }
   nextprime::diemitko diemitko_nums(0, 0, 1999);
   try {
     diemitko_nums.set_n(boost::multiprecision::mpz_int(*argv));
   } catch (boost::wrapexcept<std::runtime_error>) {
-    std::cout << HELP;
+    std::cout << help_msg;
     return EXIT_FAILURE;
   }
   std::ostream out_stream(std::cout.rdbuf());
